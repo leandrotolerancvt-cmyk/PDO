@@ -1,0 +1,9 @@
+<?php
+
+require_once 'dbconfig.php';                       // load the $pdo connection
+
+$stmt = $pdo->prepare("DELETE FROM grocery_items
+                       WHERE item_name = :name");  // never run DELETE without a WHERE clause
+$stmt->execute([':name' => 'Indomie Mi Goreng Special']);
+
+echo $stmt->rowCount() . ' row(s) deleted.';       // rowCount() = number of rows removed
