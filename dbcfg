@@ -1,0 +1,25 @@
+<?php
+
+$host     = 'localhost';          // database server
+$dbname   = 'indonesia_grocery';  // database created
+$username = 'root';               // MySQL username
+$password = '';                   // MySQL password
+$charset  = 'utf8mb4';            // supports full Unicode
+
+
+$dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+
+// PDO options
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // throw exceptions on SQL errors
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // return rows as associative arrays
+    PDO::ATTR_EMULATE_PREPARES   => false,                  // use real prepared statements
+];
+
+try {
+    // Create the PDO connection object, available as $pdo to files that include this one
+    $pdo = new PDO($dsn, $username, $password, $options);
+} catch (PDOException $e) {
+    // Stop the script and show a readable message if the connection fails
+    die('Database connection failed: ' . $e->getMessage());
+}
