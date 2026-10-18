@@ -1,0 +1,14 @@
+<?php
+
+require_once 'dbconfig.php';                       // load the $pdo connection
+
+$stmt = $pdo->prepare("UPDATE grocery_items
+                       SET price_idr = :price, stock_quantity = :stock
+                       WHERE item_name = :name");  // WHERE limits the change to one product
+$stmt->execute([
+    ':price' => 3700,                              // new price in IDR
+    ':stock' => 200,                               // new stock level
+    ':name'  => 'Indomie Mi Goreng Special',
+]);
+
+echo $stmt->rowCount() . ' row(s) updated.';       // rowCount() = number of rows changed
