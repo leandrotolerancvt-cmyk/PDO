@@ -1,0 +1,20 @@
+<?php
+
+require_once 'dbconfig.php';                       // load the $pdo connection
+
+$brand = 'Indomie';                                // brand to search for
+
+$stmt = $pdo->prepare("SELECT item_id, item_name, brand_name, price_idr
+                       FROM grocery_items
+                       WHERE brand_name = :brand
+                       ORDER BY item_id");         // prepared statement with a named placeholder
+$stmt->execute([':brand' => $brand]);              // bind the value safely and run the query
+
+echo '<pre>';
+$item = $stmt->fetch();                            // fetch() returns ONE row (the next row) per call
+print_r($item);                                    // first Indomie row
+
+$item = $stmt->fetch();                            // calling again moves to the second row
+print_r($item);
+
+echo '</pre>';
