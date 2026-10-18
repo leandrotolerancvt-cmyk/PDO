@@ -1,0 +1,44 @@
+<?php
+
+require_once 'dbconfig.php';                       // load the $pdo connection
+
+// Summary query: items, units, average price per category
+$sql = "SELECT c.category_name,
+               COUNT(g.item_id)           AS total_items,
+               SUM(g.stock_quantity)      AS total_units,
+               ROUND(AVG(g.price_idr), 2) AS avg_price_idr
+        FROM categories c
+        JOIN grocery_items g ON g.category_id = c.category_id
+        GROUP BY c.category_id, c.category_name
+        ORDER BY total_items DESC";
+$rows = $pdo->query($sql)->fetchAll();             // get every row of the result
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Indonesian Grocery Summary</title>
+    <style>
+        table { border-collapse: collapse; }
+        th, td { border: 1px solid #999; padding: 6px 12px; }
+        th { background: #c8102e; color: #fff; }  /* red from the Indonesian flag */
+    </style>
+</head>
+<body>
+    <h2>Grocery Items per Category (Indonesia)</h2>
+    <table>
+        <tr>
+            <th>Category</th><th>Items</th><th>Total Units</th><th>Avg Price (IDR)</th>
+        </tr>
+        <?php foreach ($rows as $row): ?>          <!-- one table row per result row -->
+        <tr>
+            <!-- htmlspecialchars() prevents HTML injection -->
+            <td><?= htmlspecialchars($row['category_name']) ?></td>
+            <td><?= $row['total_items'] ?></td>
+            <td><?= number_format($row['total_units']) ?></td>
+            <td>Rp <?= number_format($row['avg_price_idr'], 2) ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+</body>
+</html>
