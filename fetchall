@@ -1,0 +1,14 @@
+<?php
+
+require_once 'dbconfig.php';                       // load the $pdo connection
+
+$stmt = $pdo->query("SELECT item_id, item_name, brand_name, price_idr
+                     FROM grocery_items
+                     ORDER BY item_id
+                     LIMIT 10");                   // run a simple SELECT (first 10 rows)
+
+$items = $stmt->fetchAll();                        // fetchAll() returns ALL rows at once as an array of arrays
+
+echo '<pre>';                                      // <pre> keeps print_r() output readable in the browser
+print_r($items);                                   // dump the entire result set
+echo '</pre>';
